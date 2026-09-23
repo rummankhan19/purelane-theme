@@ -1,0 +1,127 @@
+{%- liquid
+  assign reviews = section.blocks | where: 'type', 'review'
+  assign anchor = section.settings.anchor_id | handleize
+-%}
+<section
+  class="pl-section pl-reviews"
+  {% if anchor != blank %}id="{{ anchor }}"{% endif %}
+  aria-labelledby="pl-reviews-heading-{{ section.id }}"
+  style="background: {{ section.settings.background }}; --pl-rev-speed: {{ section.settings.speed }}s;"
+  data-pl-reviews
+>
+  <div class="pl-wrap">
+    <div class="pl-revhead pl-rv">
+      <h2 class="pl-kicker pl-revhead__kicker" id="pl-reviews-heading-{{ section.id }}">{{ section.settings.kicker | escape }}</h2>
+      {%- if section.settings.aggregate_1 != blank -%}
+        <span class="pl-revhead__agg">
+          {%- if section.settings.show_agg_stars -%}
+            <span class="pl-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          {%- endif -%}
+          {{ section.settings.aggregate_1 }}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.aggregate_2 != blank -%}
+        <span class="pl-revhead__agg">{{ section.settings.aggregate_2 }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if reviews.size > 0 -%}
+    <div class="pl-revrail pl-rv">
+      <button type="button" class="pl-revrail__toggle" data-pl-rev-toggle aria-pressed="false">
+        {{ section.settings.pause_label | escape }}
+      </button>
+      <div class="pl-revtrack">
+        {%- comment -%}
+          Copy 1 is the real list. Copy 2 exists only so the marquee loops without a gap,
+          so it's hidden from assistive tech and dropped entirely under reduced motion.
+        {%- endcomment -%}
+        {%- for copy in (1..2) -%}
+          <ul class="pl-revlist{% if copy == 2 %} pl-revlist--clone{% endif %}" role="list" {% if copy == 2 %}aria-hidden="true"{% endif %}>
+            {%- for block in reviews -%}
+              {%- liquid
+                assign rating = block.settings.rating
+                assign product_label = block.settings.product_label
+                if product_label == blank and block.settings.product != blank
+                  assign product_label = block.settings.product.title
+                endif
+              -%}
+              <li class="pl-rcard" {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>
+                <div class="pl-stars pl-rcard__stars">
+                  <span aria-hidden="true">{% for i in (1..rating) %}&#9733;{% endfor %}</span>
+                  <span class="pl-sr">Rated {{ rating }} out of 5</span>
+                </div>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="pl-rcard__title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                <p class="pl-rcard__body">{{ block.settings.body | escape }}</p>
+                <div class="pl-rcard__who">
+                  {%- if block.settings.verified -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
+                    <span class="pl-sr">Verified purchase.</span>
+                  {%- endif -%}
+                  <b>{{ block.settings.author | escape }}</b>
+                  {%- if product_label != blank -%}<span>&middot; {{ product_label | escape }}</span>{%- endif -%}
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script src="{{ 'purelane-reviews.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Purelane: Reviews rail",
+  "tag": "div",
+  "class": "section pl-reviews-wrapper",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Heading", "default": "That's what they said" },
+    { "type": "checkbox", "id": "show_agg_stars", "label": "Show stars before first stat", "default": true },
+    { "type": "inline_richtext", "id": "aggregate_1", "label": "Stat 1", "default": "<b>4.8</b> from 8,000+ reviews" },
+    { "type": "inline_richtext", "id": "aggregate_2", "label": "Stat 2", "default": "Loved by <b>12 lakh+</b> homes" },
+    {
+      "type": "range", "id": "speed", "label": "Scroll duration", "info": "Time for one full loop. Higher is slower.",
+      "min": 20, "max": 90, "step": 2, "unit": "s", "default": 52
+    },
+    { "type": "text", "id": "pause_label", "label": "Pause button label", "info": "Shown to keyboard users only.", "default": "Pause scrolling reviews" },
+    {
+      "type": "color_background", "id": "background", "label": "Background",
+      "default": "linear-gradient(178deg, #fbfffb 0%, #eafaec 24%, #d6f1dc 54%, #bfe8ca 100%)"
+    },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "reviews" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Review" },
+        { "type": "text", "id": "author", "label": "Name", "default": "Verified buyer" },
+        { "type": "checkbox", "id": "verified", "label": "Verified purchase", "default": true },
+        { "type": "product", "id": "product", "label": "Product reviewed" },
+        { "type": "text", "id": "product_label", "label": "Product label override", "info": "Leave blank to use the product's title." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane: Reviews rail",
+      "blocks": [
+        { "type": "review", "settings": { "title": "Works like a charm", "body": "Finally an eco option that cleans as well as the chemical detergent I used for years, and it smells better.", "author": "Anita", "product_label": "Laundry detergent" } },
+        { "type": "review", "settings": { "title": "Best dishwash ever", "body": "Our old dishwash left my help with dry, cracked skin. That stopped completely after we switched.", "author": "Priya", "product_label": "Dishwash gel" } },
+        { "type": "review", "settings": { "title": "Great product, great packaging", "body": "Very soft on hands with a lovely fragrance, and it feels good to be using far less plastic.", "author": "Sunita", "product_label": "Liquid handwash" } },
+        { "type": "review", "settings": { "title": "Dog friendly", "body": "We switched because chemical floor cleaners were setting off my dog's allergies. No reactions since.", "author": "Rohit S.", "product_label": "Floor cleaner" } },
+        { "type": "review", "settings": { "title": "Sparkling taps again", "body": "Hard water had ruined our bathroom fittings. Two sprays and the scale wipes straight off, no scrubbing.", "author": "Verified buyer", "product_label": "Tap cleaner" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
