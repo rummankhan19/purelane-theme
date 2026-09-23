@@ -31,7 +31,11 @@
           if cp != blank and cp.compare_at_price > cp.price
             assign savings = cp.compare_at_price | minus: cp.price
           endif
-          assign includes = block.settings.includes
+          comment
+            Override text is escaped here. The product description is already HTML
+            (entities like &amp; intact), so it's only stripped of tags, never escaped again.
+          endcomment
+          assign includes = block.settings.includes | escape
           if includes == blank and cp != blank
             assign includes = cp.description | strip_html | truncatewords: 30
           endif
@@ -70,7 +74,7 @@
               <div class="pl-combo__cnt">{{ items.count }} {{ section.settings.count_label | escape }}</div>
             {%- endif -%}
             {%- if includes != blank -%}
-              <p class="pl-combo__inc">{{ includes | escape }}</p>
+              <p class="pl-combo__inc">{{ includes }}</p>
             {%- endif -%}
             {%- if cp != blank -%}
               <div class="pl-combo__prow">
