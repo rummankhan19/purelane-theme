@@ -47,7 +47,16 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - Each tier is a block that points at a real **bundle product** (e.g. "Starter box: any 2 products", ₹349, compare-at ₹598). Price, struck price and the per-product figure all come from that product. Change the price in admin and the section, cart and checkout all agree.
 - The hero's product slides can now take their price from the same bundle product ("Price this slide from"), so "Any 2 products ₹349" in the hero and the Starter tier can't drift apart. Before this, the hero added up individual bottle prices, which didn't match the design.
 - Tier features are one-per-line text, the pictured bottles are a product list (images come from the catalogue), and the highlighted tier gets the primary button and accent border, as in the file.
-- The original's hardcoded per-product maths was inconsistent: ₹349 / 2 = ₹174.50 shown as ₹174 (rounded down), ₹799 / 5 = ₹159.80 shown as ₹160 (rounded up). It's now calculated and rounded the same way every time, so the Starter tier reads ₹175. That's the one intentional visual difference, and it's a correctness fix.
+- The original's hardcoded per-product maths was inconsistent: ₹349 / 2 = ₹174.50 shown as ₹174 (rounded down), ₹799 / 5 = ₹159.80 shown as ₹160 (rounded up). It's now calculated and rounded the same way every time, so the Starter tier reads ₹175. That's one intentional visual difference, and it's a correctness fix.
+- The other: tier buttons are pinned to the bottom of each card. In the file the Starter tier has one fewer feature line, so its button sits higher than its neighbours. Aligning them is a layout-logic fix, not a restyle; everything else about the cards is unchanged.
+
+**Combos** (`sections/purelane-combos.liquid`)
+- Each combo card is a block pointing at a real **combo product** (price, compare-at, savings) plus a product list for what's inside. Title and description default to the combo product's own, with overrides.
+- The one-line benefit under each bottle in the tray ("Cuts grease instantly") is a product metafield, `custom.tagline`, not text typed into the section. Write it once per product and every combo that includes that product shows it.
+- "3 products" is counted from the included list, and "You save ₹398" is calculated. The "Biggest saving" pill is an optional override.
+- A product with no image falls back to the dashed leaf tile, which is how the file already draws the fabric conditioner.
+- In the file the toilet cleaner has two different taglines in two combos ("Kills 99.9% germs" and "Fights limescale in the bowl"). With one metafield per product that can't happen; it's the same product, so it gets one description. Flagging it rather than adding a per-combo override nobody would maintain.
+- Rail is a native horizontal scroller with snap, same as the file. Cards are list items; titles are `h3`.
 
 ## Metafield definitions (Products)
 
@@ -56,6 +65,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 | `custom.badge` | Single line text | Card pill ("Best seller", "New") |
 | `custom.rating` | Decimal | Rating fallback |
 | `custom.review_count` | Integer | Review count fallback |
+| `custom.tagline` | Single line text | One-line benefit under each bottle in combo trays |
 
 ## Mistakes caught in review
 
@@ -69,6 +79,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - Self-host fonts with `size-adjust` fallbacks to kill layout shift.
 - AJAX add to cart through Dawn's cart drawer instead of a full page post.
 - Reviews as a metaobject (or read from a review app) so the same reviews can feed product pages, not just this section.
+- The combos rail hides its scrollbar, as the file does. Keyboard users reach every card by tabbing through the buttons, but mouse users without a trackpad have no visible way to scroll. I'd add small prev/next arrows on desktop and flag it to design first.
 - Store currency format set to `₹{{amount_no_decimals}}` to match "₹200".
 
 ## AI workflow
