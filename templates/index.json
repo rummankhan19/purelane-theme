@@ -36,15 +36,15 @@
         "product_slide_feNb9a": {
           "type": "product_slide",
           "settings": {
-            "product": "multi-surface-cleaner",
+            "product": "kitchen-cleaner-foaming",
             "slide_label": "Single Bottle",
-            "price_product": "multi-surface-cleaner"
+            "price_product": "kitchen-cleaner-foaming"
           }
         },
         "product_slide_DLKb3q": {
           "type": "product_slide",
           "settings": {
-            "product": "starter-box-any-2",
+            "product": "tap-cleaner-limescale-remover",
             "slide_label": "Any 2 products",
             "price_product": "starter-box-any-2"
           }
@@ -52,7 +52,7 @@
         "product_slide_epXC3a": {
           "type": "product_slide",
           "settings": {
-            "product": "most-popular-box-any-3",
+            "product": "copper-bronze-brass-cleaner",
             "slide_label": "Any 3 products",
             "price_product": "most-popular-box-any-3"
           }
@@ -171,7 +171,7 @@
           "settings": {
             "combo_product": "combo-kitchen-essentials",
             "included_products": [
-              "kitchen-cleaner-foaming",
+              "kitchen-cleaner",
               "organic-dishwash-gel",
               "tap-cleaner-limescale-remover"
             ],
@@ -249,32 +249,6 @@
             "highlight": false,
             "button_link": ""
           }
-        },
-        "combo_n7Pxch": {
-          "type": "combo",
-          "settings": {
-            "combo_product": "",
-            "included_products": [],
-            "title": "",
-            "includes": "",
-            "flag": "",
-            "save_override": "",
-            "highlight": false,
-            "button_link": ""
-          }
-        },
-        "combo_8GktrJ": {
-          "type": "combo",
-          "settings": {
-            "combo_product": "",
-            "included_products": [],
-            "title": "",
-            "includes": "",
-            "flag": "",
-            "save_override": "",
-            "highlight": false,
-            "button_link": ""
-          }
         }
       },
       "block_order": [
@@ -282,9 +256,7 @@
         "combo_ReJXiq",
         "combo_LqPK6D",
         "combo_L749z6",
-        "combo_7zB7XR",
-        "combo_n7Pxch",
-        "combo_8GktrJ"
+        "combo_7zB7XR"
       ],
       "name": "Purelane: Combos",
       "settings": {
