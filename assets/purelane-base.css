@@ -255,3 +255,10 @@
 @media (prefers-reduced-motion: reduce) {
   .pl-tier, .pl-tier:hover { transition: none; transform: none; }
 }
+
+/* Tier cards: pin the button to the bottom so all three line up.
+   The prototype lets it float (Starter has one fewer feature line, so its button sits higher).
+   Documented as a layout fix in BUILD_NOTES. */
+.pl-tier { display: flex; flex-direction: column; }
+.pl-tier__tag { align-self: flex-start; }
+.pl-tier .pl-btn { margin-top: auto; }
