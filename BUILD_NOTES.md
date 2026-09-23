@@ -13,7 +13,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 7. **Reveal animations hide content without JS.** `.rv` sets `opacity: 0` unconditionally, so if the script fails the page is blank below the fold. The blur filter on every revealing element is also costly to paint.
 8. **Class names collide with Dawn.** `.card`, `.btn`, `.badge`, `.wrap` would clash with or be restyled by Dawn's CSS.
 9. **Heavy animated SVG filters** (`feTurbulence` / `feDisplacementMap`) repaint continuously behind the whole page.
-10. Fonts load from Google with no fallback metrics, so text reflows when Outfit arrives.
+10. Fonts load from Google Fonts: two extra third-party connections before any text can render in the right typeface.
 
 ## What I changed and why
 
@@ -58,6 +58,21 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - In the file the toilet cleaner has two different taglines in two combos ("Kills 99.9% germs" and "Fights limescale in the bowl"). With one metafield per product that can't happen; it's the same product, so it gets one description. Flagging it rather than adding a per-combo override nobody would maintain.
 - Rail is a native horizontal scroller with snap, same as the file. Cards are list items; titles are `h3`.
 
+**Fonts** (`snippets/purelane-head.liquid`)
+- Outfit and Inter are self-hosted on the Shopify CDN as variable woff2 files (one file per family covers every weight) and preloaded. That removes the Google Fonts round trips and clears Theme Check's `RemoteAsset` warnings.
+- "₹" isn't in the latin subset. Rather than load the 15 to 85 KB latin-ext files for one character, each family gets a ~1 KB subset containing only U+20B9, picked up automatically through `unicode-range`.
+- Theme Check now reports zero errors and no warnings in any Purelane file; the remaining warnings are in stock Dawn files.
+
+**CI** (`.github/workflows/ci.yml`)
+- Dawn's Lighthouse job needs store secrets and failed on every push, so it's removed. Theme Check still runs on every push.
+
+## Bonus
+
+**Club signup** (`sections/purelane-signup.liquid`)
+- The prototype's form was `onsubmit="return false"`, so signing up did nothing. It now posts to Shopify's customer form: the email is saved in Customers with marketing consent and the tags `newsletter, purelane-club`, ready for Shopify Email.
+- Success and error states are rendered by Shopify after the post; the success message is rich text so marketing can put the live discount code in it.
+- Real `<label>` for the email field, `autocomplete="email"`, and a visible focus ring (the file set `outline: none` with no replacement).
+
 ## Metafield definitions (Products)
 
 | Namespace.key | Type | Used for |
@@ -76,7 +91,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 
 - **The mix-and-match picker itself.** "Build this box" goes to the bundle product. Letting the customer choose which 2, 3 or 5 products go in needs Shopify Bundles or a bundle app with line-item properties; that's a product decision as much as a build.
 - **Water background.** Replaced with static per-section gradients for performance. Visually close but not identical to the animated original; with more time I'd rebuild the caustics as a single lightweight canvas or pre-rendered video loop and measure it.
-- Self-host fonts with `size-adjust` fallbacks to kill layout shift.
+- Add `size-adjust` fallback faces so the swap from system font to Outfit/Inter causes no layout shift.
 - AJAX add to cart through Dawn's cart drawer instead of a full page post.
 - Reviews as a metaobject (or read from a review app) so the same reviews can feed product pages, not just this section.
 - The combos rail hides its scrollbar, as the file does. Keyboard users reach every card by tabbing through the buttons, but mouse users without a trackpad have no visible way to scroll. I'd add small prev/next arrows on desktop and flag it to design first.
