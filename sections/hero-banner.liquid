@@ -88,7 +88,7 @@
               endif
               assign savings = compare_total | minus: price_total
             -%}
-            <div class="hero-banner__slide{% if forloop.first %} is-active{% endif %}" data-hero-slide data-slide-index="{{ forloop.index0 }}">
+            <div class="hero-banner__slide hero-banner__slide--n{{ slide_end | at_most: 3 }}{% if forloop.first %} is-active{% endif %}" data-hero-slide data-slide-index="{{ forloop.index0 }}">
               {%- for block in slide_products -%}
                 {%- if block.settings.product -%}
                   <span class="hero-banner__product-img hero-banner__product-img--{{ forloop.index }}">
