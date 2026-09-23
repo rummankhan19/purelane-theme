@@ -1,0 +1,250 @@
+{{ 'component-hero-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign slide_blocks = section.blocks | where: 'type', 'product_slide'
+  assign badge_blocks = section.blocks | where: 'type', 'badge'
+-%}
+
+<section
+  class="hero-banner"
+  id="hero-banner-{{ section.id }}"
+  {% if section.settings.background_image %}
+    style="--hero-bg: url({{ section.settings.background_image | image_url: width: 2400 }});"
+  {% endif %}
+>
+  <div class="hero-banner__overlay" style="--overlay-opacity: {{ section.settings.overlay_opacity }}%;"></div>
+
+  {%- if badge_blocks.size > 0 -%}
+    <div class="hero-banner__badge-rail" aria-label="Product promises">
+      {%- for block in badge_blocks -%}
+        <div class="hero-banner__badge" {{ block.shopify_attributes }}>
+          <span class="hero-banner__badge-icon">{% render 'icon-promise', icon: block.settings.icon %}</span>
+          <span>{{ block.settings.label }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="hero-banner__grid page-width">
+    <div class="hero-banner__copy">
+      <h1 class="hero-banner__heading">
+        {{ section.settings.heading_line_1 }}<br>
+        {{ section.settings.heading_line_2 }}<br>
+        <span class="hero-banner__accent">{{ section.settings.heading_accent }}</span>
+      </h1>
+
+      <div class="hero-banner__rule" aria-hidden="true">
+        <i></i>{% render 'icon-promise', icon: 'leaf' %}<i></i>
+      </div>
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="hero-banner__lede">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      <div class="hero-banner__cta">
+        {%- if section.settings.button_label_1 != blank -%}
+          <a class="pl-btn pl-btn--primary" href="{{ section.settings.button_link_1 | default: '#' }}">
+            {{ section.settings.button_label_1 }}
+            {% render 'icon-arrow' %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.button_label_2 != blank -%}
+          <a class="pl-btn pl-btn--ghost" href="{{ section.settings.button_link_2 | default: '#' }}">
+            {{ section.settings.button_label_2 }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if badge_blocks.size > 0 -%}
+        <div class="hero-banner__badge-strip">
+          {%- for block in badge_blocks -%}
+            <div>
+              {% render 'icon-promise', icon: block.settings.icon %}
+              {{ block.settings.label }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if slide_blocks.size > 0 -%}
+      <div class="hero-banner__stage" data-hero-stage>
+        <div class="hero-banner__slides">
+          {%- for slide_end in (1..slide_blocks.size) -%}
+            {%- liquid
+              assign slide_products = slide_blocks | slice: 0, slide_end
+              assign price_total = 0
+              assign compare_total = 0
+              for b in slide_products
+                if b.settings.product
+                  assign price_total = price_total | plus: b.settings.product.price
+                  assign compare_total = compare_total | plus: b.settings.product.compare_at_price | default: b.settings.product.price
+                endif
+              endfor
+              assign savings = compare_total | minus: price_total
+            -%}
+            <div class="hero-banner__slide{% if forloop.first %} is-active{% endif %}" data-hero-slide data-slide-index="{{ forloop.index0 }}">
+              {%- for block in slide_products -%}
+                {%- if block.settings.product -%}
+                  <span class="hero-banner__product-img hero-banner__product-img--{{ forloop.index }}">
+                    {%- if block.settings.product.featured_image -%}
+                      {{ block.settings.product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: block.settings.product.featured_image.alt }}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'hero-banner__placeholder' }}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              {%- endfor -%}
+              <div class="hero-banner__price-tag">
+                <span class="hero-banner__price-label">
+                  {{ slide_products.last.settings.slide_label | default: slide_products.last.settings.product.title }}
+                </span>
+                <span class="hero-banner__price-value">
+                  <strong>{{ price_total | money }}</strong>
+                  {%- if compare_total > price_total -%}<s>{{ compare_total | money }}</s>{%- endif -%}
+                </span>
+                {%- if savings > 0 -%}
+                  <span class="hero-banner__price-cut">Save {{ savings | money }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if slide_blocks.size > 1 -%}
+          <div class="hero-banner__dots" role="tablist" aria-label="Product slide selector">
+            {%- for slide_end in (1..slide_blocks.size) -%}
+              <button type="button" class="{% if forloop.first %}is-active{% endif %}" role="tab" aria-label="Show {{ forloop.index }} product{% if forloop.index > 1 %}s{% endif %}" data-hero-dot></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script src="{{ 'hero-banner.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading, line 1",
+      "default": "Clean"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading, line 2",
+      "default": "That"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading, accent line",
+      "default": "Lasts"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it."
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "Primary button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Secondary button label",
+      "default": "How it works"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Secondary button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Promise badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "shield", "label": "Shield check" },
+            { "value": "ban", "label": "No chemicals" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Plant powered"
+        }
+      ]
+    },
+    {
+      "type": "product_slide",
+      "name": "Product slide",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "slide_label",
+          "label": "Slide label override",
+          "info": "Leave blank to use the product title. E.g. \"Any 2 products\"."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "Hero banner",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "leaf", "label": "Plant powered" } },
+        { "type": "badge", "settings": { "icon": "shield", "label": "Safe for kids & pets" } },
+        { "type": "badge", "settings": { "icon": "ban", "label": "Zero harsh chemicals" } },
+        { "type": "product_slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}
