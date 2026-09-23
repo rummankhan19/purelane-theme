@@ -1,0 +1,11 @@
+{%- comment -%}
+  Rendered once in layout/theme.liquid, just before </head>:
+    {% render 'purelane-head' %}
+  Loads the prototype's two typefaces and the shared pl- layer so every
+  Purelane section can rely on them without each one re-including them.
+{%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-reveal.js' | asset_url }}" defer="defer"></script>
