@@ -171,3 +171,6 @@
     transition-delay: 0s !important;
   }
 }
+
+/* No grid gap on mobile: the prototype spaces the stage with its own 20px top margin only */
+@media (max-width: 900px) { .hero-banner__grid { gap: 0; } }
