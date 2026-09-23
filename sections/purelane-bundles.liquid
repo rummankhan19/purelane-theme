@@ -1,0 +1,149 @@
+{%- liquid
+  assign tiers = section.blocks | where: 'type', 'tier'
+  assign anchor = section.settings.anchor_id | handleize
+-%}
+<section
+  class="pl-section pl-bundles"
+  {% if anchor != blank %}id="{{ anchor }}"{% endif %}
+  aria-labelledby="pl-bundles-heading-{{ section.id }}"
+  style="background: {{ section.settings.background }};"
+>
+  <div class="pl-wrap">
+    <div class="pl-glass pl-bundles__intro pl-rv">
+      <div class="pl-panel-head">
+        {%- if section.settings.kicker != blank -%}
+          <span class="pl-kicker">{{ section.settings.kicker | escape }}</span>
+        {%- endif -%}
+        <h2 class="pl-d2" id="pl-bundles-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="pl-lede">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="pl-tiers">
+      {%- for block in tiers -%}
+        {%- liquid
+          assign bp = block.settings.bundle_product
+          assign qty = block.settings.quantity
+          assign pix = block.settings.pictured_products
+          assign stagger = forloop.index0 | modulo: 4
+          if stagger > 0
+            assign stagger = stagger | plus: 1
+          endif
+          assign btn_url = block.settings.button_link | default: bp.url | default: '#'
+        -%}
+        <article class="pl-glass pl-tier pl-rv{% if stagger > 0 %} pl-rv-d{{ stagger | at_most: 3 }}{% endif %}{% if block.settings.highlight %} pl-tier--best{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.tag != blank -%}
+            <span class="pl-tier__tag">{{ block.settings.tag | escape }}</span>
+          {%- endif -%}
+
+          {%- if pix.count > 0 -%}
+            <div class="pl-tier__pix{% if pix.count > 3 %} pl-tier__pix--many{% endif %}" aria-hidden="true">
+              {%- for p in pix -%}
+                {%- if p.featured_media -%}
+                  {{ p.featured_media | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 120, 160', sizes: '60px', alt: '' }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'pl-tier__ph' }}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="pl-tier__qty">{{ qty }}<small>{{ section.settings.qty_label | escape }}</small></div>
+
+          {%- if bp != blank -%}
+            <div class="pl-tier__price">
+              {{ bp.price | money }}
+              {%- if bp.compare_at_price > bp.price -%}
+                <s><span class="pl-sr">Regular price</span>{{ bp.compare_at_price | money }}</s>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.show_per_item and qty > 1 -%}
+              {%- comment -%} Round to whole rupees, consistently (the prototype mixed floor and round) {%- endcomment -%}
+              {%- assign per = bp.price | times: 1.0 | divided_by: qty | divided_by: 100 | round | times: 100 -%}
+              <p class="pl-tier__per">{{ section.settings.per_prefix }} {{ per | money }} {{ section.settings.per_suffix }}</p>
+            {%- endif -%}
+          {%- else -%}
+            <p class="pl-tier__per">Pick a bundle product for this tier.</p>
+          {%- endif -%}
+
+          {%- if block.settings.features != blank -%}
+            {%- assign lines = block.settings.features | newline_to_br | split: '<br />' -%}
+            <ul class="pl-tier__list" role="list">
+              {%- for line in lines -%}
+                {%- assign line = line | strip -%}
+                {%- if line != blank -%}
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
+                    {{ line | escape }}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if block.settings.button_label != blank -%}
+            <a class="pl-btn {% if block.settings.highlight %}pl-btn--primary{% else %}pl-btn--ghost{% endif %}" href="{{ btn_url }}">
+              {{ block.settings.button_label | escape }}
+              {%- if block.settings.highlight %} {% render 'icon-arrow' %}{% endif -%}
+              <span class="pl-sr">: {{ block.settings.tag | escape }}, {{ qty }} {{ section.settings.qty_label | escape }}</span>
+            </a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane: Bundles",
+  "tag": "div",
+  "class": "section pl-bundles-wrapper",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One box. Every room." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way." },
+    { "type": "text", "id": "qty_label", "label": "Quantity label", "default": "Products" },
+    { "type": "checkbox", "id": "show_per_item", "label": "Show per-product price", "default": true },
+    { "type": "text", "id": "per_prefix", "label": "Per-product text before price", "default": "Flat" },
+    { "type": "text", "id": "per_suffix", "label": "Per-product text after price", "default": "per product" },
+    {
+      "type": "color_background", "id": "background", "label": "Background",
+      "default": "linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%)"
+    },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "bundles" }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Bundle tier",
+      "settings": [
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Starter" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight this tier", "default": false },
+        {
+          "type": "product", "id": "bundle_product", "label": "Bundle product",
+          "info": "The product customers actually buy for this box. Price and compare-at price come from it."
+        },
+        { "type": "range", "id": "quantity", "label": "Products in the box", "min": 1, "max": 10, "step": 1, "default": 2 },
+        { "type": "product_list", "id": "pictured_products", "label": "Products pictured", "limit": 5 },
+        { "type": "textarea", "id": "features", "label": "Features", "info": "One per line.", "default": "Pick any two products\nFree shipping across India" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Build this box" },
+        { "type": "url", "id": "button_link", "label": "Button link", "info": "Leave blank to link to the bundle product." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane: Bundles",
+      "blocks": [
+        { "type": "tier", "settings": { "tag": "Starter", "quantity": 2, "features": "Pick any two products\nFree shipping across India" } },
+        { "type": "tier", "settings": { "tag": "Most popular", "highlight": true, "quantity": 3, "features": "Pick any three products\nCovers kitchen and laundry\nFree shipping across India" } },
+        { "type": "tier", "settings": { "tag": "Whole home", "quantity": 5, "features": "Pick any five products\nEvery room in one order\nFree shipping across India" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

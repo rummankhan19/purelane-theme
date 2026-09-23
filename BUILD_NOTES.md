@@ -43,6 +43,12 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - Loop speed is a setting; mobile runs at the same 0.77 ratio the original used (52s to 40s).
 - Kicker is now the section's `h2` (it was a `span`, so the section had no heading), and card titles are `h3` instead of `h5`. Visual output unchanged.
 
+**Bundles** (`sections/purelane-bundles.liquid`)
+- Each tier is a block that points at a real **bundle product** (e.g. "Starter box: any 2 products", ₹349, compare-at ₹598). Price, struck price and the per-product figure all come from that product. Change the price in admin and the section, cart and checkout all agree.
+- The hero's product slides can now take their price from the same bundle product ("Price this slide from"), so "Any 2 products ₹349" in the hero and the Starter tier can't drift apart. Before this, the hero added up individual bottle prices, which didn't match the design.
+- Tier features are one-per-line text, the pictured bottles are a product list (images come from the catalogue), and the highlighted tier gets the primary button and accent border, as in the file.
+- The original's hardcoded per-product maths was inconsistent: ₹349 / 2 = ₹174.50 shown as ₹174 (rounded down), ₹799 / 5 = ₹159.80 shown as ₹160 (rounded up). It's now calculated and rounded the same way every time, so the Starter tier reads ₹175. That's the one intentional visual difference, and it's a correctness fix.
+
 ## Metafield definitions (Products)
 
 | Namespace.key | Type | Used for |
@@ -58,7 +64,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 
 ## Known gaps / what I'd do with more time
 
-- **Hero slide pricing.** The design shows bundle-tier prices ("Any 2 products ₹349"). The hero currently sums the selected products' prices. The right fix is one source of truth for bundle tiers (a metaobject or bundle products) shared by the hero and the Bundles section.
+- **The mix-and-match picker itself.** "Build this box" goes to the bundle product. Letting the customer choose which 2, 3 or 5 products go in needs Shopify Bundles or a bundle app with line-item properties; that's a product decision as much as a build.
 - **Water background.** Replaced with static per-section gradients for performance. Visually close but not identical to the animated original; with more time I'd rebuild the caustics as a single lightweight canvas or pre-rendered video loop and measure it.
 - Self-host fonts with `size-adjust` fallbacks to kill layout shift.
 - AJAX add to cart through Dawn's cart drawer instead of a full page post.

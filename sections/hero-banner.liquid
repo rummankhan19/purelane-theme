@@ -81,6 +81,11 @@
                   assign compare_total = compare_total | plus: b.settings.product.compare_at_price | default: b.settings.product.price
                 endif
               endfor
+              assign pricing = slide_products.last.settings.price_product
+              if pricing != blank
+                assign price_total = pricing.price
+                assign compare_total = pricing.compare_at_price | default: pricing.price
+              endif
               assign savings = compare_total | minus: price_total
             -%}
             <div class="hero-banner__slide{% if forloop.first %} is-active{% endif %}" data-hero-slide data-slide-index="{{ forloop.index0 }}">
@@ -104,7 +109,7 @@
                   {%- if compare_total > price_total -%}<s>{{ compare_total | money }}</s>{%- endif -%}
                 </span>
                 {%- if savings > 0 -%}
-                  <span class="hero-banner__price-cut">Save {{ savings | money }}</span>
+                  <span class="hero-banner__price-cut">{{ section.settings.save_label | default: 'Save' }} {{ savings | money }}</span>
                 {%- endif -%}
               </div>
             </div>
@@ -190,6 +195,12 @@
       "type": "url",
       "id": "button_link_2",
       "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Savings label",
+      "default": "Save"
     }
   ],
   "blocks": [
@@ -230,6 +241,12 @@
           "id": "slide_label",
           "label": "Slide label override",
           "info": "Leave blank to use the product title. E.g. \"Any 2 products\"."
+        },
+        {
+          "type": "product",
+          "id": "price_product",
+          "label": "Price this slide from",
+          "info": "Optional. Pick a bundle product (e.g. the 2-product box) and this slide shows its price instead of adding up the bottles. Same product the Bundles section uses, so the two can't disagree."
         }
       ]
     }

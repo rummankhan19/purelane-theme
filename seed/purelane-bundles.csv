@@ -1,0 +1,4 @@
+Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Grams,Variant Inventory Tracker,Variant Inventory Qty,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Compare At Price,Variant Requires Shipping,Variant Taxable,Image Src,Status
+starter-box-any-2,Starter box: any 2 products,"<p>Mix and match. One flat price, free shipping.</p>",Purelane,Bundle,bundle,TRUE,Title,Default Title,PL-B02,1000,,,deny,manual,349.00,598.00,TRUE,TRUE,,active
+most-popular-box-any-3,Most popular box: any 3 products,"<p>Mix and match. One flat price, free shipping.</p>",Purelane,Bundle,bundle,TRUE,Title,Default Title,PL-B03,1000,,,deny,manual,499.00,897.00,TRUE,TRUE,,active
+whole-home-box-any-5,Whole home box: any 5 products,"<p>Mix and match. One flat price, free shipping.</p>",Purelane,Bundle,bundle,TRUE,Title,Default Title,PL-B05,1000,,,deny,manual,799.00,1495.00,TRUE,TRUE,,active
