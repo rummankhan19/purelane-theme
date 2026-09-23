@@ -1,0 +1,94 @@
+{%- comment -%}
+  Shared Purelane product card.
+  Params:
+    product       (required) product object
+    index         (optional) position in the grid, used for the reveal stagger
+    show_rating   (optional) true/false, default true
+    label_off     (optional) text after the discount %, e.g. "off"
+    label_reviews (optional) text after the review count, e.g. "reviews"
+    image_sizes   (optional) sizes attribute for the image
+
+  Data sources (nothing hardcoded):
+    badge   -> product.metafields.custom.badge        (single line text)
+    rating  -> product.metafields.reviews.rating      (Shopify standard, filled by review apps)
+               falls back to product.metafields.custom.rating (decimal) for a store with no app yet
+    count   -> product.metafields.reviews.rating_count, falls back to custom.review_count
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign stagger = index | default: 0 | modulo: 4
+  assign badge = p.metafields.custom.badge.value
+
+  assign rating = p.metafields.reviews.rating.value.rating
+  if rating == blank
+    assign rating = p.metafields.custom.rating.value
+  endif
+  assign rating_count = p.metafields.reviews.rating_count.value
+  if rating_count == blank
+    assign rating_count = p.metafields.custom.review_count.value
+  endif
+
+  assign variant = p.selected_or_first_available_variant
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+    assign pct = p.compare_at_price | minus: p.price | times: 100.0 | divided_by: p.compare_at_price | round
+  endif
+  assign sizes = image_sizes | default: '(min-width: 860px) 200px, 45vw'
+-%}
+<article class="pl-card pl-glass pl-rv{% if stagger > 0 %} pl-rv-d{{ stagger }}{% endif %}">
+  <div class="pl-card__shot">
+    {%- if badge != blank -%}
+      <span class="pl-card__pill">{{ badge | escape }}</span>
+    {%- endif -%}
+    {%- if p.featured_media -%}
+      {{
+        p.featured_media
+        | image_url: width: 480
+        | image_tag:
+          loading: 'lazy',
+          widths: '160, 240, 320, 480',
+          sizes: sizes,
+          class: 'pl-card__img'
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'pl-card__img pl-card__img--placeholder' }}
+    {%- endif -%}
+  </div>
+
+  <h3 class="pl-card__title">
+    <a href="{{ p.url }}">{{ p.title | escape }}</a>
+  </h3>
+
+  {%- if show_rating != false and rating != blank -%}
+    <div class="pl-card__rate">
+      <span aria-hidden="true"><b>&#9733; {{ rating | round: 1 }}</b>{% if rating_count != blank %} &middot; {{ rating_count }} {{ label_reviews }}{% endif %}</span>
+      <span class="pl-sr">Rated {{ rating | round: 1 }} out of 5{% if rating_count != blank %}, {{ rating_count }} {{ label_reviews }}{% endif %}</span>
+    </div>
+  {%- endif -%}
+
+  <div class="pl-card__pr">
+    <strong>{{ p.price | money }}</strong>
+    {%- if on_sale -%}
+      <s><span class="pl-sr">Regular price</span>{{ p.compare_at_price | money }}</s>
+      <em>{{ pct }}% {{ label_off }}</em>
+    {%- endif -%}
+  </div>
+
+  {%- if p.available == false -%}
+    <button type="button" class="pl-btn pl-btn--ghost pl-btn--sm" disabled>
+      {{ 'products.product.sold_out' | t }}
+    </button>
+  {%- elsif p.has_only_default_variant -%}
+    {%- form 'product', p, class: 'pl-card__form' -%}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button type="submit" class="pl-btn pl-btn--ghost pl-btn--sm">
+        {{ 'products.product.add_to_cart' | t }}<span class="pl-sr">: {{ p.title | escape }}</span>
+      </button>
+    {%- endform -%}
+  {%- else -%}
+    <a href="{{ p.url }}" class="pl-btn pl-btn--ghost pl-btn--sm">
+      {{ 'products.product.choose_options' | t }}<span class="pl-sr">: {{ p.title | escape }}</span>
+    </a>
+  {%- endif -%}
+</article>
