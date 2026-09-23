@@ -154,8 +154,13 @@
   .hero-banner__grid { grid-template-columns: 1fr; }
   .hero-banner__copy { max-width: none; }
   .hero-banner__stage { position: relative; right: auto; bottom: auto; width: min(88vw, 420px); margin: 20px auto 0; }
-  .hero-banner__slides { height: clamp(300px, 44svh, 430px); }
-  .hero-banner__copy { max-width: none; }
+  /* Height follows the stage width, not the screen height. With a fixed 430px
+     stage on a narrow phone, three bottles run out of width, shrink to fit and
+     leave a tall empty band above them. Sized so three bottles fit side by side. */
+  .hero-banner__slides { height: min(72vw, 340px); }
+  .hero-banner__slide { padding-right: 0; }
+  .hero-banner__price-tag { padding: 9px 12px 10px; border-radius: 14px; max-width: 46%; bottom: 0; }
+  .hero-banner__price-value strong { font-size: 20px; }
 }
 
 
