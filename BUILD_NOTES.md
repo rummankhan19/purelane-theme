@@ -109,8 +109,28 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - The combos rail hides its scrollbar, as the file does. Keyboard users reach every card by tabbing through the buttons, but mouse users without a trackpad have no visible way to scroll. I'd add small prev/next arrows on desktop and flag it to design first.
 - Store currency format set to `₹{{amount_no_decimals}}` to match "₹200".
 
+
 ## AI workflow
 
-- **Delegated:** mapping the 1,700-line file (section boundaries, the duplicate palette, broken tags), first-pass Liquid and schema, extracting exact CSS values per selector, seed product CSV.
-- **Where it failed:** it pulled values from the wrong palette and wrote an unscoped `.button` rule that leaked into all of Dawn. Both passed a read-through and only showed up when the section was viewed inside a real store next to Dawn's own pages. It also defaulted to "simplify the expensive effect" without flagging that the brief treats visual changes as a fail.
-- **What I'd systematise for 20 more:** a token-extraction script that dumps only the winning cascade values per selector, a namespace lint that rejects any selector not prefixed `pl-`, a standard card snippet contract, and a screenshot diff at 375 / 768 / 1280 against the prototype before anything is called done.
+I used Claude (chat) as the main builder. It read the 1,700-line prototype, wrote the Liquid sections, CSS and JS, and debugged errors with me. I did the store setup, all the Shopify admin work (metafields, products, collections, menus, discounts, policies), placed and configured every section in the theme editor, and checked each result visually against the prototype on desktop and mobile. Most of the fixes started with me noticing something looked wrong and bringing a screenshot back.
+
+What I delegated
+- Mapping the prototype: section boundaries, the duplicate colour themes, broken tags, the exact CSS values that actually render.
+- First drafts of every section, schema and snippet, the seed product CSVs, and the bottle artwork extracted from the file as product images.
+- Explaining Shopify CLI and git errors as I hit them.
+
+Where it failed
+- It copied button colours from the wrong (unused) palette and wrote a global .button rule that restyled every Dawn button in the store. Only visible once the section was live next to Dawn's own pages.
+- One generated icon file carried a large hidden metadata block and wouldn't upload to Shopify.
+- It double-escaped product descriptions, so "&" showed up as "&amp;".
+- It gave every section its own gradient background, which left hard seams between sections. I spotted it; we moved to one shared page backdrop.
+- Hero bottles shrank and left an empty band on mobile, and the bundle buttons didn't line up. Both caught by me in the phone preview.
+- It didn't warn me up front that theme editor changes don't sync back to local files by default. I nearly pushed an empty homepage over my editor setup before we pulled templates/index.json.
+- Dawn's CI failed on every push (Lighthouse needed store secrets, Theme Check needed write permission). Fixed only after I went looking at why GitHub kept emailing me.
+
+What I'd systematise for twenty more
+- A setup checklist: create metafield definitions before importing products, run theme dev with --theme-editor-sync, pull the JSON templates before every push.
+- A script that extracts only the CSS values that actually render per selector, so the wrong palette can't be copied.
+- A lint that rejects any CSS selector not prefixed pl-, so nothing leaks into the base theme.
+- One shared card snippet contract that every section's cards use.
+- Screenshot comparison against the prototype at 375, 768 and 1280 before calling a section done, since visual QA caught most of the real bugs.
