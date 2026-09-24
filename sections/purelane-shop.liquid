@@ -7,7 +7,7 @@
   class="pl-section pl-shop"
   {% if anchor != blank %}id="{{ anchor }}"{% endif %}
   aria-labelledby="pl-shop-heading-{{ section.id }}"
-  style="background: {{ section.settings.background }}; --pl-cols: {{ section.settings.columns_desktop }};"
+  style="{% if section.settings.background != blank %}{% if section.settings.background != blank %}background: {{ section.settings.background }};{% endif %}{% endif %} --pl-cols: {{ section.settings.columns_desktop }};"
 >
   <div class="pl-wrap">
     <div class="pl-panel-head pl-rv">
@@ -136,7 +136,7 @@
       "type": "color_background",
       "id": "background",
       "label": "Background",
-      "default": "linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%)"
+      "info": "Leave empty to show the page backdrop, so sections flow into each other."
     },
     {
       "type": "text",

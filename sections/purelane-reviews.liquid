@@ -6,7 +6,7 @@
   class="pl-section pl-reviews"
   {% if anchor != blank %}id="{{ anchor }}"{% endif %}
   aria-labelledby="pl-reviews-heading-{{ section.id }}"
-  style="background: {{ section.settings.background }}; --pl-rev-speed: {{ section.settings.speed }}s;"
+  style="{% if section.settings.background != blank %}background: {{ section.settings.background }};{% endif %} --pl-rev-speed: {{ section.settings.speed }}s;"
   data-pl-reviews
 >
   <div class="pl-wrap">
@@ -91,8 +91,7 @@
     },
     { "type": "text", "id": "pause_label", "label": "Pause button label", "info": "Shown to keyboard users only.", "default": "Pause scrolling reviews" },
     {
-      "type": "color_background", "id": "background", "label": "Background",
-      "default": "linear-gradient(178deg, #fbfffb 0%, #eafaec 24%, #d6f1dc 54%, #bfe8ca 100%)"
+      "type": "color_background", "id": "background", "label": "Background", "info": "Leave empty to show the page backdrop, so sections flow into each other."
     },
     { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "reviews" }
   ],

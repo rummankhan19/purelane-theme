@@ -6,7 +6,7 @@
   class="pl-section pl-combos"
   {% if anchor != blank %}id="{{ anchor }}"{% endif %}
   aria-labelledby="pl-combos-heading-{{ section.id }}"
-  style="background: {{ section.settings.background }};"
+  style="{% if section.settings.background != blank %}background: {{ section.settings.background }};{% endif %}"
 >
   <div class="pl-wrap">
     <div class="pl-panel-head pl-rv">
@@ -128,8 +128,7 @@
     { "type": "text", "id": "swipe_cue", "label": "Swipe hint", "default": "Swipe for more combos" },
     { "type": "textarea", "id": "rail_note", "label": "Note under the rail", "default": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay." },
     {
-      "type": "color_background", "id": "background", "label": "Background",
-      "default": "linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%)"
+      "type": "color_background", "id": "background", "label": "Background", "info": "Leave empty to show the page backdrop, so sections flow into each other."
     },
     { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "combos" }
   ],

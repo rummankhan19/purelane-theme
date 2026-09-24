@@ -43,9 +43,24 @@
     scroll listener. Set Header > Sticky header to "None" so Dawn's own sticky
     script doesn't also position it.
   {%- endcomment -%}
+  {%- comment -%}
+    One continuous backdrop behind the whole home page, fixed to the viewport
+    like the prototype's scene layer, instead of each section painting its own
+    gradient (which left hard seams where one section's dark bottom met the
+    next section's light top). It doesn't depend on section order, so
+    reordering or removing sections can't break it. A section can still set
+    its own background in the editor.
+  {%- endcomment -%}
   <style>
     .section-header { position: sticky; top: 10px; z-index: 40; margin-bottom: -62px; }
     .section-header .header-wrapper { background: transparent; }
+    html { background: #eaf8ee; }
+    body.gradient, body { background: transparent; }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(178deg, #fbfffb 0%, #e3f6e8 30%, #c9ebd3 65%, #aedfbf 100%);
+    }
+    .hero-banner { --hero-bg: transparent; }
   </style>
 {%- endif -%}
 {{ 'purelane-base.css' | asset_url | stylesheet_tag }}

@@ -359,6 +359,22 @@
         "background": "linear-gradient(178deg, rgba(240, 251, 242, 1), rgba(217, 242, 223, 1) 28%, rgba(189, 230, 200, 1) 60%, rgba(162, 217, 182, 1) 100%)",
         "anchor_id": "shop"
       }
+    },
+    "purelane_signup_dWEyjm": {
+      "type": "purelane-signup",
+      "name": "Purelane: Club signup",
+      "settings": {
+        "kicker": "Join the Purelane Club",
+        "heading": "Get ₹100 off your first bundle",
+        "subheading": "Plus first access to new launches and restocks.",
+        "email_label": "Email address",
+        "placeholder": "your@email.com",
+        "button_label": "Get my ₹100 off",
+        "success_message": "<p>You're in. Use code <strong>CLUB100</strong> at checkout.</p>",
+        "tags": "newsletter,purelane-club",
+        "background": "linear-gradient(178deg, rgba(233, 248, 236, 1), rgba(205, 237, 214, 1) 30%, rgba(173, 220, 190, 1) 62%, rgba(142, 205, 170, 1) 100%)",
+        "anchor_id": "club"
+      }
     }
   },
   "order": [
@@ -366,6 +382,7 @@
     "purelane_reviews_ynUtQa",
     "purelane_combos_pjMQNH",
     "purelane_bundles_REjHdb",
-    "purelane_shop_gXy4Dw"
+    "purelane_shop_gXy4Dw",
+    "purelane_signup_dWEyjm"
   ]
 }

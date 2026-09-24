@@ -6,7 +6,7 @@
   class="pl-section pl-bundles"
   {% if anchor != blank %}id="{{ anchor }}"{% endif %}
   aria-labelledby="pl-bundles-heading-{{ section.id }}"
-  style="background: {{ section.settings.background }};"
+  style="{% if section.settings.background != blank %}background: {{ section.settings.background }};{% endif %}"
 >
   <div class="pl-wrap">
     <div class="pl-glass pl-bundles__intro pl-rv">
@@ -111,8 +111,7 @@
     { "type": "text", "id": "per_prefix", "label": "Per-product text before price", "default": "Flat" },
     { "type": "text", "id": "per_suffix", "label": "Per-product text after price", "default": "per product" },
     {
-      "type": "color_background", "id": "background", "label": "Background",
-      "default": "linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%)"
+      "type": "color_background", "id": "background", "label": "Background", "info": "Leave empty to show the page backdrop, so sections flow into each other."
     },
     { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "bundles" }
   ],

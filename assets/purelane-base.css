@@ -415,3 +415,33 @@
 @media (prefers-reduced-motion: reduce) {
   .section-header .header__menu-item span::after { transition: none; }
 }
+
+/* ======================= FOOTER (bonus) ======================= */
+.pl-footer { padding: 44px 0 30px; border-top: 1px solid rgba(75,58,143,.12); }
+.pl-footer__grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .pl-footer__grid { grid-template-columns: 1.3fr 1fr 1fr 1fr; } }
+.pl-footer__brand { display: inline-block; margin-bottom: 16px; }
+.pl-footer__brand img { height: 40px; width: auto; display: block; }
+.pl-footer__name { font: 800 16.5px var(--pl-font-display); text-transform: uppercase; color: var(--pl-surface); }
+.pl-footer__h { font: 700 11px var(--pl-font-display); letter-spacing: .18em; text-transform: uppercase; color: #4f7d10; margin: 0 0 14px; }
+.pl-footer ul { list-style: none; margin: 0; padding: 0; }
+.pl-footer__col a, .pl-footer__col p { display: block; font-size: 13.5px; color: var(--pl-paper-2); margin: 0 0 9px; text-decoration: none; transition: .25s; }
+.pl-footer__col p { max-width: 30ch; line-height: 1.5; }
+.pl-footer__col .pl-footer__small { font-size: 12px; color: var(--pl-paper-3); }
+.pl-footer__col a:hover { color: var(--pl-surface); transform: translateX(3px); }
+.pl-footer__col a:focus-visible, .pl-footer__bot a:focus-visible { outline: 2px solid var(--pl-brand); outline-offset: 2px; border-radius: 3px; }
+.pl-footer__bot {
+  margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(75,58,143,.11);
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; font-size: 11.5px; color: var(--pl-paper-3);
+}
+.pl-footer__policies { display: flex; flex-wrap: wrap; gap: 0 14px; }
+.pl-footer__policies a { color: var(--pl-paper-3); text-decoration: none; }
+.pl-footer__policies a:hover { color: var(--pl-surface); }
+@media (max-width: 760px) { .pl-footer { padding: 34px 0 24px; } }
+@media (prefers-reduced-motion: reduce) { .pl-footer__col a:hover { transform: none; } }
+
+/* Header fixes after live check */
+/* Dawn's cart icon has more built-in padding in its viewBox than search/account, so it needs a bigger box to match */
+.section-header .header__icon--cart .svg-wrapper, .section-header .header__icon--cart svg { width: 34px; height: 34px; }
+/* Anchor links (#shop, #bundles...) land below the pinned header instead of under it */
+.pl-section { scroll-margin-top: 96px; }

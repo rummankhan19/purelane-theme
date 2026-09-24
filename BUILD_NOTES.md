@@ -5,7 +5,7 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 ## What I'd flag about the original file
 
 1. **Two colour themes ship at once.** A dark `:root` palette loads first, then a second `<style>` block ("VERSION 2, light") overrides the same variables. The light one is what renders, so that's the spec. The dark block is dead weight, and it's easy to copy values from the wrong one (I did, once: see "Mistakes caught" below).
-2. **The page is one script, not independent sections.** A fixed full-screen background cross-fades based on each section's `data-scene="1..4"`, which assumes a fixed page order. Reorder or remove a section in the theme editor and the backgrounds go wrong. Each section here owns its background as a merchant setting instead.
+2. **The page is one script, not independent sections.** A fixed full-screen background cross-fades based on each section's `data-scene="1..4"`, which assumes a fixed page order. Reorder or remove a section in the theme editor and the backgrounds go wrong. Here the home page gets one fixed backdrop that doesn't depend on section order, and any section can still set its own background in the editor. (An earlier pass gave every section its own gradient, which left visible seams between sections; the shared backdrop is closer to the file and still safe to reorder.)
 3. **The markup is broken in places.** The hero's slide-dots `<div>` is cut off mid-element, and the reviews track is truncated in the middle of an `<h5>`. Browsers patch this silently, which hides the bug.
 4. **Products are drawings, not products.** Bottles are base64 SVG backgrounds and inline SVGs, with prices and review counts typed into the HTML. The shop shelf also repeats the same four products twice (the second set as inline SVG instead of the shared asset).
 5. **"Add to cart" does nothing.** It's a bare `<button>` with no form, variant or handler, and product cards don't link to the product page.
@@ -79,6 +79,11 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - On the home page the header floats over the hero and stays pinned while scrolling, done with `position: sticky` and a negative bottom margin, no scroll listener. Other pages get the same pill in normal flow.
 - Announcement bar is styled as the prototype's light ticker strip. It rotates messages (Dawn's behaviour) rather than scrolling them as a marquee; I kept Dawn's version because it's accessible out of the box.
 - On phones Dawn's layout is kept (menu button on the left), where the prototype puts it on the right.
+
+**Footer** (`sections/purelane-footer.liquid`)
+- Replaces Dawn's footer in the footer group. Link columns are real Shopify menus picked per block, so marketing edits them in Content > Menus. The prototype's links were `#` anchors to sections, several of which don't exist.
+- The bottom row lists the store's actual policy pages (`shop.policies`) instead of the file's plain text "Privacy · Terms · Refunds · Contact", which linked nowhere.
+- Brand reuses the logo from Theme settings, so there's one logo to change, not two.
 
 ## Metafield definitions (Products)
 

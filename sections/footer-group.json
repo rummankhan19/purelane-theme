@@ -1,11 +1,64 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "purelane_footer_WYMdfR": {
+      "type": "purelane-footer",
+      "blocks": {
+        "brand_bbqifw": {
+          "type": "brand",
+          "settings": {
+            "text": "Effective cleaning, powered by nature. Made for Indian homes since day one."
+          }
+        },
+        "menu_JDwCka": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "menu_PqcrAr": {
+          "type": "menu",
+          "settings": {
+            "heading": "About",
+            "menu": "footer"
+          }
+        },
+        "contact_MP6Y7W": {
+          "type": "contact",
+          "settings": {
+            "heading": "Get in touch",
+            "email": "hello@purelane.com",
+            "phone": "+91 9930 123 234",
+            "company": "Purelane Eco Products Pvt Ltd"
+          }
+        }
+      },
+      "block_order": [
+        "brand_bbqifw",
+        "menu_JDwCka",
+        "menu_PqcrAr",
+        "contact_MP6Y7W"
+      ],
+      "name": "Purelane: Footer",
+      "settings": {
+        "legal_name": "Purelane Eco Products Private Limited",
+        "background": "linear-gradient(180deg, rgba(255,255,255,.62), rgba(214,241,221,.90))"
+      }
+    },
     "footer": {
       "type": "footer",
-      "blocks": {},
-      "block_order": [],
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
@@ -23,6 +76,7 @@
     }
   },
   "order": [
+    "purelane_footer_WYMdfR",
     "footer"
   ]
 }
