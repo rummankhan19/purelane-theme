@@ -53,7 +53,7 @@
       "name": "Purelane: Footer",
       "settings": {
         "legal_name": "Purelane Eco Products Private Limited",
-        "background": "linear-gradient(180deg, rgba(255,255,255,.62), rgba(214,241,221,.90))"
+        "background": ""
       }
     },
     "footer": {

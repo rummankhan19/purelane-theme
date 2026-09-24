@@ -159,7 +159,7 @@
         "aggregate_2": "Loved by <strong>12 lakh+</strong> homes",
         "speed": 52,
         "pause_label": "Pause scrolling reviews",
-        "background": "linear-gradient(178deg, rgba(251, 255, 251, 1), rgba(234, 250, 236, 1) 24%, rgba(214, 241, 220, 1) 54%, rgba(191, 232, 202, 1) 100%)",
+        "background": "",
         "anchor_id": "reviews"
       }
     },
@@ -271,7 +271,7 @@
         "button_label": "Shop bundle",
         "swipe_cue": "Swipe for more combos",
         "rail_note": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay.",
-        "background": "linear-gradient(178deg, rgba(240, 251, 242, 1), rgba(217, 242, 223, 1) 28%, rgba(189, 230, 200, 1) 60%, rgba(162, 217, 182, 1) 100%)",
+        "background": "",
         "anchor_id": "combos"
       }
     },
@@ -338,7 +338,7 @@
         "show_per_item": false,
         "per_prefix": "Flat",
         "per_suffix": "per product",
-        "background": "linear-gradient(178deg, rgba(240, 251, 242, 1), rgba(217, 242, 223, 1) 28%, rgba(189, 230, 200, 1) 60%, rgba(162, 217, 182, 1) 100%)",
+        "background": "",
         "anchor_id": "bundles"
       }
     },
@@ -356,7 +356,7 @@
         "show_rating": true,
         "label_off": "off",
         "label_reviews": "reviews",
-        "background": "linear-gradient(178deg, rgba(240, 251, 242, 1), rgba(217, 242, 223, 1) 28%, rgba(189, 230, 200, 1) 60%, rgba(162, 217, 182, 1) 100%)",
+        "background": "",
         "anchor_id": "shop"
       }
     },
@@ -372,7 +372,7 @@
         "button_label": "Get my ₹100 off",
         "success_message": "<p>You're in. Use code <strong>CLUB100</strong> at checkout.</p>",
         "tags": "newsletter,purelane-club",
-        "background": "linear-gradient(178deg, rgba(233, 248, 236, 1), rgba(205, 237, 214, 1) 30%, rgba(173, 220, 190, 1) 62%, rgba(142, 205, 170, 1) 100%)",
+        "background": "",
         "anchor_id": "club"
       }
     }
