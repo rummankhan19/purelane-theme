@@ -73,6 +73,13 @@ Built on stock Dawn. All Purelane code is namespaced (`pl-` classes, `--pl-` tok
 - Success and error states are rendered by Shopify after the post; the success message is rich text so marketing can put the live discount code in it.
 - Real `<label>` for the email field, `autocomplete="email"`, and a visible focus ring (the file set `outline: none` with no replacement).
 
+**Header and announcement bar** (restyle of Dawn's `header` and `announcement-bar` sections, `assets/purelane-base.css`)
+- Dawn's header is restyled into the prototype's floating glass pill rather than replaced. Dawn keeps handling dropdown menus, the mobile drawer, predictive search, the live cart count and account links, which the prototype's header only drew (its buttons did nothing).
+- Brand lockup is an image in Theme settings > Logo, and the links come from Content > Menus, so both are editable without code. Menu underline is the prototype's slide-in accent bar.
+- On the home page the header floats over the hero and stays pinned while scrolling, done with `position: sticky` and a negative bottom margin, no scroll listener. Other pages get the same pill in normal flow.
+- Announcement bar is styled as the prototype's light ticker strip. It rotates messages (Dawn's behaviour) rather than scrolling them as a marquee; I kept Dawn's version because it's accessible out of the box.
+- On phones Dawn's layout is kept (menu button on the left), where the prototype puts it on the right.
+
 ## Metafield definitions (Products)
 
 | Namespace.key | Type | Used for |

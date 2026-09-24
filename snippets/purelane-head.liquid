@@ -35,5 +35,18 @@
     unicode-range: U+20B9;
   }
 </style>
+{%- if template.name == 'index' -%}
+  {%- comment -%}
+    Home page only: the header floats over the hero as in the prototype.
+    Sticky with a negative bottom margin equal to its own height, so the hero
+    slides underneath and the pill stays pinned while scrolling. Pure CSS, no
+    scroll listener. Set Header > Sticky header to "None" so Dawn's own sticky
+    script doesn't also position it.
+  {%- endcomment -%}
+  <style>
+    .section-header { position: sticky; top: 10px; z-index: 40; margin-bottom: -62px; }
+    .section-header .header-wrapper { background: transparent; }
+  </style>
+{%- endif -%}
 {{ 'purelane-base.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'purelane-reveal.js' | asset_url }}" defer="defer"></script>
